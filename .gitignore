@@ -1,0 +1,43 @@
+# macOS
+.DS_Store
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Build and cache outputs
+dist/
+build/
+coverage/
+.expo/
+.expo-shared/
+web-build/
+*.tsbuildinfo
+
+# EAS/Expo local files
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
+*.temp
