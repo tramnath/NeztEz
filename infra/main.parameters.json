@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "westus2"
+    },
+    "appName": {
+      "value": "neztez-sign-api"
+    },
+    "appServicePlanName": {
+      "value": "asp-neztez-sign-api"
+    },
+    "logAnalyticsName": {
+      "value": "log-neztez-sign"
+    },
+    "appInsightsName": {
+      "value": "appi-neztez-sign-api"
+    },
+    "keyVaultName": {
+      "value": "kv-neztez-sign"
+    },
+    "storageAccountName": {
+      "value": "stneztezsign001"
+    }
+  }
+}

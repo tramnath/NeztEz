@@ -1,0 +1,13 @@
+name: reapp-zoho-sign
+metadata:
+  template: appservice-node-zoho-sign@0.0.1
+
+services:
+  api:
+    project: ./api
+    language: js
+    host: appservice
+
+infra:
+  provider: bicep
+  path: infra
