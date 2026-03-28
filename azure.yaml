@@ -4,10 +4,10 @@ metadata:
 
 services:
   api:
-    project: ./api
+    project: ./backend/api
     language: js
     host: appservice
 
 infra:
   provider: bicep
-  path: infra
+  path: backend/infra

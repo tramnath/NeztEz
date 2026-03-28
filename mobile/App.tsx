@@ -243,6 +243,11 @@ const groundsComponents = () => [
   mkComponent('BBQ Gas Outlet'),
 ];
 
+const bedroomComponents = () => [
+  ...commonComponents(),
+  mkComponent('Smoke Detector'),
+];
+
 const mkRoom = (key: string, name: string, components: ComponentTemplate[]): RoomTemplate => ({
   id: generateId(),
   key,
@@ -254,7 +259,7 @@ const mkRoom = (key: string, name: string, components: ComponentTemplate[]): Roo
 const createDefaultRoomTemplates = (): RoomTemplate[] => [
   mkRoom('entry', 'Entry', commonComponents()),
   mkRoom('den-office', 'Den/Office', commonComponents()),
-  mkRoom('bedroom', 'Bedroom', commonComponents()),
+  mkRoom('bedroom', 'Bedroom', bedroomComponents()),
   mkRoom('kitchen', 'Kitchen', [...commonComponents(), ...kitchenExtras()]),
   mkRoom('living-room', 'Living Room', commonComponents()),
   mkRoom('powder-bath', 'Powder Bath', [...commonComponents(), ...bathroomExtras()]),
@@ -299,8 +304,12 @@ const createRoomTemplateFromSpaceName = (spaceName: string): RoomTemplate => {
     return mkRoom('bathroom', spaceName, [...commonComponents(), ...bathroomExtras()]);
   }
 
-  if (normalized.includes('bedroom') || normalized.includes('office') || normalized.includes('den')) {
-    return mkRoom('bedroom', spaceName, commonComponents());
+  if (normalized.includes('bedroom')) {
+    return mkRoom('bedroom', spaceName, bedroomComponents());
+  }
+
+  if (normalized.includes('office') || normalized.includes('den')) {
+    return mkRoom('den-office', spaceName, commonComponents());
   }
 
   return mkRoom(normalized.replace(/\s+/g, '-'), spaceName, commonComponents());
@@ -685,7 +694,7 @@ export default function App() {
     setRoomTemplates((prev) => {
       const bedroomCount = prev.filter((room) => room.key === 'bedroom').length;
       const name = bedroomCount === 0 ? 'Bedroom' : `Bedroom ${bedroomCount + 1}`;
-      return [...prev, mkRoom('bedroom', name, commonComponents())];
+      return [...prev, mkRoom('bedroom', name, bedroomComponents())];
     });
   };
 

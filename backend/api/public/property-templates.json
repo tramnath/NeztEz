@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "properties": [
+    {
+      "id": "paintbrush",
+      "name": "Paintbrush",
+      "address": "3401 Paintbrush Path, Melissa, TX 75454",
+      "spaces": [
+        "Entry",
+        "Bedroom (Front of the house)",
+        "Utility",
+        "Office",
+        "Pantry",
+        "Powder Bath",
+        "Kitchen",
+        "Living Room",
+        "Game Room",
+        "Bedroom (Left of game room)",
+        "Bedroom (Right of game room)",
+        "Main Bath",
+        "Master Bedroom",
+        "Mater Bath",
+        "Garage",
+        "Grounds"
+      ]
+    }
+  ]
+}

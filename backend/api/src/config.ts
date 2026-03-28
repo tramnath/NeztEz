@@ -10,6 +10,10 @@ const required = (value: string | undefined, name: string) => {
 export const config = {
   port: Number(process.env.PORT || 8080),
   nodeEnv: process.env.NODE_ENV || 'development',
+  admin: {
+    dataFilePath: process.env.ADMIN_DATA_FILE_PATH || './data/admin-db.json',
+    sessionTtlHours: Number(process.env.ADMIN_SESSION_TTL_HOURS || 168),
+  },
   internal: {
     adminApiKey: process.env.ADMIN_API_KEY || '',
   },

@@ -1,0 +1,21 @@
+{
+  "walkthroughs": [
+    {
+      "id": "c5e80eed-f25a-4d7f-852d-1b051e929518",
+      "ownerUserId": "707a28ad-8ff9-4eee-be0e-c73e5bc799c1",
+      "propertyId": "09853767-fdde-4232-abf0-3eb7424e2e90",
+      "type": "movein",
+      "createdAt": "2026-03-28T07:12:38.304Z"
+    }
+  ],
+  "walkthroughShares": [
+    {
+      "id": "773d5d8d-83ac-4337-83ca-598d011702dd",
+      "walkthroughId": "c5e80eed-f25a-4d7f-852d-1b051e929518",
+      "token": "I7JGBeKm8_V3EwWDl9cy8pVEoizjv6vY",
+      "createdAt": "2026-03-28T07:12:43.025Z",
+      "expiresAt": "2026-03-29T07:12:43.025Z"
+    }
+  ],
+  "submissions": []
+}

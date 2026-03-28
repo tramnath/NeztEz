@@ -16,11 +16,13 @@
     "@azure/keyvault-secrets": "^4.8.0",
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^22.15.21",
+    "@types/qrcode": "^1.5.6",
     "tsx": "^4.19.3",
     "typescript": "^5.9.2"
   }

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeztEz Admin</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <h1>NeztEz Admin</h1>
+        <p>Signup, define properties, configure rooms/spaces, and generate 24-hour walkthrough QR links.</p>
+      </header>
+
+      <section class="card">
+        <h2>Account</h2>
+        <div class="row">
+          <input id="email" type="email" placeholder="email" />
+          <input id="password" type="password" placeholder="password (min 8 chars)" />
+        </div>
+        <div class="row">
+          <button id="signupBtn" type="button">Sign up</button>
+          <button id="loginBtn" type="button">Log in</button>
+          <button id="meBtn" type="button">Who am I</button>
+        </div>
+        <pre id="authOutput" class="output"></pre>
+      </section>
+
+      <section class="card" id="propertySection" hidden>
+        <h2>Property Templates</h2>
+        <p class="hint">Pick a template, clone an existing property, or start from scratch.</p>
+        <div class="row" id="templateList"></div>
+
+        <h3>Existing Properties</h3>
+        <p class="hint">Click a house to load its configuration. Use Clone to create a copy draft.</p>
+        <div id="existingPropertyGrid" class="home-grid"></div>
+        <div class="row">
+          <button id="startScratchBtn" type="button">Start New From Scratch</button>
+        </div>
+
+        <h3>Create Property</h3>
+        <p class="hint">Room configuration is generated using the same space-to-components mapping as the mobile admin page.</p>
+        <div class="row stack">
+          <input id="propertyName" type="text" placeholder="Property name" />
+          <input id="propertyAddress" type="text" placeholder="Address" />
+          <textarea id="roomsText" rows="10" placeholder="One space per line. Example: Kitchen"></textarea>
+          <div class="row">
+            <button id="generateRoomsBtn" type="button">Generate Rooms From Spaces</button>
+            <button id="addBedroomBtn" type="button">Add Bedroom</button>
+          </div>
+          <div class="row">
+            <input id="customRoomName" type="text" placeholder="Custom room name" />
+            <button id="addCustomRoomBtn" type="button">Add Room</button>
+          </div>
+          <div id="roomConfigEditor" class="room-editor"></div>
+        </div>
+        <button id="createPropertyBtn" type="button">Create Property</button>
+        <pre id="propertyOutput" class="output"></pre>
+      </section>
+
+      <section class="card" id="walkthroughSection" hidden>
+        <h2>Walkthrough + QR Share</h2>
+        <div class="row stack">
+          <select id="propertySelect"></select>
+          <select id="walkType">
+            <option value="movein">Move In</option>
+            <option value="moveout">Move Out</option>
+            <option value="routine">Routine Inspection</option>
+          </select>
+        </div>
+        <div class="row">
+          <button id="refreshBtn" type="button">Refresh Properties</button>
+          <button id="createWalkBtn" type="button">Create Walkthrough</button>
+        </div>
+        <pre id="walkOutput" class="output"></pre>
+
+        <div class="row stack">
+          <select id="walkSelect"></select>
+          <button id="shareBtn" type="button">Generate 24h QR Link</button>
+        </div>
+        <div id="shareArea" class="share"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/static/admin.js"></script>
+  </body>
+</html>

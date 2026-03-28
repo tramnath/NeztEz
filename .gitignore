@@ -41,3 +41,7 @@ web-build/
 *.swo
 *.tmp
 *.temp
+
+# Legacy SQLite artifacts
+backend/api/data/*.sqlite
+backend/api/data/*.sqlite-*

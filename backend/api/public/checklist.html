@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeztEz Walkthrough</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <h1>Walkthrough Checklist</h1>
+        <p id="meta"></p>
+      </header>
+
+      <section class="card">
+        <h2>Inspector Info</h2>
+        <div class="row stack">
+          <input id="submittedByName" placeholder="Your name" />
+          <input id="submittedByEmail" type="email" placeholder="Your email" />
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Checklist</h2>
+        <p>Provide any notes per room. Submission is locked permanently after save.</p>
+        <div id="roomsContainer" class="row stack"></div>
+        <button id="submitBtn" type="button">Submit Checklist</button>
+        <pre id="result" class="output"></pre>
+      </section>
+    </main>
+
+    <script type="module" src="/static/checklist.js"></script>
+  </body>
+</html>
