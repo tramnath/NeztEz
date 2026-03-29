@@ -30,7 +30,64 @@ const mkComponent = (name, detailFields = []) => ({
   id: generateId(),
   name,
   detailFields,
+  defaultDetails: {},
+  defaultNote: '',
 });
+
+const cloneDefaultDetails = (value) => ({ ...(value || {}) });
+
+const cloneComponentTemplate = (component) => ({
+  id: generateId(),
+  name: component.name,
+  detailFields: [...(component.detailFields || [])],
+  defaultDetails: cloneDefaultDetails(component.defaultDetails),
+  defaultNote: component.defaultNote || '',
+});
+
+const applyComponentOverrides = (baseComponents, overrides = []) => {
+  if (!Array.isArray(overrides) || overrides.length === 0) {
+    return baseComponents.map(cloneComponentTemplate);
+  }
+
+  const nextComponents = baseComponents.map(cloneComponentTemplate);
+
+  overrides.forEach((override) => {
+    const name = typeof override?.name === 'string' ? override.name.trim() : '';
+    if (!name) {
+      return;
+    }
+
+    const detailFields = Array.isArray(override.detailFields)
+      ? override.detailFields
+          .filter((field) => typeof field === 'string')
+          .map((field) => field.trim())
+          .filter(Boolean)
+      : undefined;
+
+    const match = nextComponents.find(
+      (component) => component.name.trim().toLowerCase() === name.toLowerCase(),
+    );
+
+    if (match) {
+      if (detailFields) {
+        match.detailFields = [...detailFields];
+      }
+      match.defaultDetails = cloneDefaultDetails(override.defaultDetails);
+      match.defaultNote = typeof override.defaultNote === 'string' ? override.defaultNote.trim() : '';
+      return;
+    }
+
+    nextComponents.push({
+      id: generateId(),
+      name,
+      detailFields: detailFields ? [...detailFields] : [],
+      defaultDetails: cloneDefaultDetails(override.defaultDetails),
+      defaultNote: typeof override.defaultNote === 'string' ? override.defaultNote.trim() : '',
+    });
+  });
+
+  return nextComponents;
+};
 
 const commonComponents = () => [
   mkComponent('Doors/Locks'),
@@ -127,6 +184,24 @@ const createRoomTemplateFromSpaceName = (spaceName) => {
   };
 };
 
+const createRoomTemplateFromSpace = (space) => {
+  if (typeof space === 'string') {
+    return createRoomTemplateFromSpaceName(space);
+  }
+
+  const name = typeof space?.name === 'string' ? space.name.trim() : '';
+  if (!name) {
+    return createRoomTemplateFromSpaceName('Untitled Space');
+  }
+
+  const baseRoom = createRoomTemplateFromSpaceName(name);
+  return {
+    ...baseRoom,
+    name,
+    components: applyComponentOverrides(baseRoom.components, space.components),
+  };
+};
+
 const setOutput = (el, value) => {
   el.textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
 };
@@ -170,6 +245,8 @@ const cloneRoomConfig = (room) => {
       id: generateId(),
       name: component.name,
       detailFields: [...(component.detailFields || [])],
+      defaultDetails: cloneDefaultDetails(component.defaultDetails),
+      defaultNote: component.defaultNote || '',
     })),
   };
 };
@@ -184,15 +261,79 @@ const moveRoomConfig = (fromIndex, toIndex) => {
   renderRoomEditor();
 };
 
+const moveComponentInRoom = (roomIndex, fromIndex, toIndex) => {
+  const components = state.roomConfigs[roomIndex]?.components;
+  if (!components || toIndex < 0 || toIndex >= components.length) {
+    return;
+  }
+
+  const [component] = components.splice(fromIndex, 1);
+  components.splice(toIndex, 0, component);
+  renderRoomEditor();
+};
+
+let draggedRoomIndex = null;
+
 const renderRoomEditor = () => {
   roomConfigEditor.innerHTML = '';
 
   state.roomConfigs.forEach((room, roomIndex) => {
     const card = document.createElement('div');
     card.className = 'room-card';
+    card.draggable = true;
+
+    card.addEventListener('dragstart', (event) => {
+      if (event.target?.closest?.('.component-chip')) {
+        event.preventDefault();
+        return;
+      }
+
+      draggedRoomIndex = roomIndex;
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', String(roomIndex));
+      card.classList.add('is-dragging');
+    });
+
+    card.addEventListener('dragend', () => {
+      draggedRoomIndex = null;
+      card.classList.remove('is-dragging');
+      roomConfigEditor
+        .querySelectorAll('.room-card.is-drop-target')
+        .forEach((el) => el.classList.remove('is-drop-target'));
+    });
+
+    card.addEventListener('dragover', (event) => {
+      if (draggedRoomIndex === null || draggedRoomIndex === roomIndex) {
+        return;
+      }
+
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+      card.classList.add('is-drop-target');
+    });
+
+    card.addEventListener('dragleave', () => {
+      card.classList.remove('is-drop-target');
+    });
+
+    card.addEventListener('drop', (event) => {
+      event.preventDefault();
+      card.classList.remove('is-drop-target');
+
+      if (draggedRoomIndex === null || draggedRoomIndex === roomIndex) {
+        return;
+      }
+
+      moveRoomConfig(draggedRoomIndex, roomIndex);
+    });
 
     const header = document.createElement('div');
     header.className = 'room-card-header';
+
+    const dragHandle = document.createElement('span');
+    dragHandle.className = 'room-drag-handle';
+    dragHandle.textContent = 'Drag';
+    dragHandle.title = 'Drag to reorder room';
 
     const roomName = document.createElement('input');
     roomName.value = room.name;
@@ -209,22 +350,6 @@ const renderRoomEditor = () => {
       renderRoomEditor();
     });
 
-    const moveUpBtn = document.createElement('button');
-    moveUpBtn.type = 'button';
-    moveUpBtn.textContent = 'Up';
-    moveUpBtn.disabled = roomIndex === 0;
-    moveUpBtn.addEventListener('click', () => {
-      moveRoomConfig(roomIndex, roomIndex - 1);
-    });
-
-    const moveDownBtn = document.createElement('button');
-    moveDownBtn.type = 'button';
-    moveDownBtn.textContent = 'Down';
-    moveDownBtn.disabled = roomIndex === state.roomConfigs.length - 1;
-    moveDownBtn.addEventListener('click', () => {
-      moveRoomConfig(roomIndex, roomIndex + 1);
-    });
-
     const deleteBtn = document.createElement('button');
     deleteBtn.type = 'button';
     deleteBtn.textContent = 'Delete';
@@ -233,19 +358,61 @@ const renderRoomEditor = () => {
       renderRoomEditor();
     });
 
+    header.appendChild(dragHandle);
     header.appendChild(roomName);
-    header.appendChild(moveUpBtn);
-    header.appendChild(moveDownBtn);
     header.appendChild(cloneBtn);
     header.appendChild(deleteBtn);
     card.appendChild(header);
 
     const componentList = document.createElement('div');
     componentList.className = 'component-chip-list';
+    let draggedComponentIndex = null;
 
     room.components.forEach((component, componentIndex) => {
       const chip = document.createElement('div');
       chip.className = 'component-chip';
+      chip.draggable = true;
+      chip.title = 'Drag to reorder component';
+
+      chip.addEventListener('dragstart', (event) => {
+        draggedComponentIndex = componentIndex;
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', String(componentIndex));
+        chip.classList.add('is-dragging');
+      });
+
+      chip.addEventListener('dragend', () => {
+        draggedComponentIndex = null;
+        chip.classList.remove('is-dragging');
+        componentList
+          .querySelectorAll('.component-chip.is-drop-target')
+          .forEach((el) => el.classList.remove('is-drop-target'));
+      });
+
+      chip.addEventListener('dragover', (event) => {
+        if (draggedComponentIndex === null || draggedComponentIndex === componentIndex) {
+          return;
+        }
+
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+        chip.classList.add('is-drop-target');
+      });
+
+      chip.addEventListener('dragleave', () => {
+        chip.classList.remove('is-drop-target');
+      });
+
+      chip.addEventListener('drop', (event) => {
+        event.preventDefault();
+        chip.classList.remove('is-drop-target');
+
+        if (draggedComponentIndex === null || draggedComponentIndex === componentIndex) {
+          return;
+        }
+
+        moveComponentInRoom(roomIndex, draggedComponentIndex, componentIndex);
+      });
 
       const nameSpan = document.createElement('span');
       nameSpan.textContent = component.name;
@@ -256,6 +423,24 @@ const renderRoomEditor = () => {
         detail.className = 'component-detail';
         detail.textContent = `(${component.detailFields.join(', ')})`;
         chip.appendChild(detail);
+      }
+
+      const defaults = [];
+      if (component.defaultDetails && Object.keys(component.defaultDetails).length > 0) {
+        defaults.push(
+          `defaults: ${Object.entries(component.defaultDetails)
+            .map(([key, value]) => `${key}=${value}`)
+            .join(', ')}`,
+        );
+      }
+      if (component.defaultNote) {
+        defaults.push(`note: ${component.defaultNote}`);
+      }
+      if (defaults.length > 0) {
+        const defaultsDetail = document.createElement('span');
+        defaultsDetail.className = 'component-detail';
+        defaultsDetail.textContent = ` ${defaults.join(' | ')}`;
+        chip.appendChild(defaultsDetail);
       }
 
       const remove = document.createElement('button');
@@ -309,8 +494,12 @@ const applyTemplateToDraft = (template) => {
   state.selectedExistingPropertyId = null;
   document.getElementById('propertyName').value = template.name;
   document.getElementById('propertyAddress').value = template.address || '';
-  roomsText.value = (template.spaces || []).join('\n');
-  regenerateRoomConfigsFromText();
+  roomsText.value = (template.spaces || [])
+    .map((space) => (typeof space === 'string' ? space : space?.name || ''))
+    .filter(Boolean)
+    .join('\n');
+  state.roomConfigs = (template.spaces || []).map((space) => createRoomTemplateFromSpace(space));
+  renderRoomEditor();
   renderProperties();
 };
 
@@ -325,6 +514,8 @@ const applyExistingPropertyToDraft = (property, { clone = false } = {}) => {
       id: generateId(),
       name: component.name,
       detailFields: [...(component.detailFields || [])],
+      defaultDetails: cloneDefaultDetails(component.defaultDetails),
+      defaultNote: component.defaultNote || '',
     })),
   }));
 
@@ -391,7 +582,6 @@ const renderProperties = () => {
     const homeName = document.createElement('span');
     homeName.className = 'home-name';
     homeName.textContent = property.name;
-    homeButton.appendChild(homeName);
 
     const cloneBtn = document.createElement('button');
     cloneBtn.type = 'button';
@@ -412,6 +602,7 @@ const renderProperties = () => {
     });
 
     homeItem.appendChild(homeButton);
+    homeItem.appendChild(homeName);
     homeItem.appendChild(cloneBtn);
     existingPropertyGrid.appendChild(homeItem);
   });

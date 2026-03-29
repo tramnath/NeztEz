@@ -10,6 +10,8 @@ export type RoomDefinition = {
     id: string;
     name: string;
     detailFields: string[];
+    defaultDetails: Record<string, string>;
+    defaultNote: string;
   }>;
 };
 
@@ -139,8 +141,18 @@ const readJson = async <T>(filePath: string, fallback: T): Promise<T> => {
   }
 };
 
-const propertyFilePath = (propertyId: string) =>
-  path.join(propertiesDirPath, `${encodeURIComponent(propertyId)}.json`);
+const toFilePrefix = (value: string) => {
+  const prefix = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  return prefix || 'property';
+};
+
+const propertyFilePath = (property: Pick<PropertyRecord, 'id' | 'name'>) =>
+  path.join(propertiesDirPath, `${toFilePrefix(property.name)}_${property.id}.json`);
 
 const normalizeAuthDb = (value: Partial<AuthDb> | undefined): AuthDb => ({
   users: value?.users || [],
@@ -197,7 +209,7 @@ const migrateLegacyDbIfNeeded = async () => {
   } satisfies WorkflowDb);
 
   for (const property of legacy.properties) {
-    await writeJsonAtomic(propertyFilePath(property.id), property);
+    await writeJsonAtomic(propertyFilePath(property), property);
   }
 };
 
@@ -241,6 +253,11 @@ const readDb = async (): Promise<AdminDb> => {
     );
 
     if (property && typeof property.id === 'string' && property.id.length > 0) {
+      const expectedFileName = path.basename(propertyFilePath(property));
+      if (fileName !== expectedFileName) {
+        continue;
+      }
+
       properties.push(property);
     }
   }
@@ -274,7 +291,7 @@ const writeDb = async (db: AdminDb) => {
 
   const expectedPropertyFilePaths = new Set<string>();
   for (const property of db.properties) {
-    const filePath = propertyFilePath(property.id);
+    const filePath = propertyFilePath(property);
     expectedPropertyFilePaths.add(filePath);
     await writeJsonAtomic(filePath, property);
   }

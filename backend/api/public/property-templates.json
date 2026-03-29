@@ -2,21 +2,52 @@
   "version": 1,
   "properties": [
     {
-      "id": "paintbrush",
-      "name": "Paintbrush",
-      "address": "3401 Paintbrush Path, Melissa, TX 75454",
+      "id": "new-property",
+      "name": "new-property",
+      "address": "123 sample street, sample city, sample state, 12345",
       "spaces": [
-        "Entry",
-        "Bedroom (Front of the house)",
+        {
+          "name": "Entry",
+          "components": [
+            {
+              "name": "Floor",
+              "defaultDetails": {
+                "Type": "LVP"
+              }
+            },
+            {
+              "name": "Window Coverings",
+              "defaultDetails": {
+                "Type": "Faux wood blinds"
+              }
+            },
+            {
+              "name": "Other",
+              "defaultNote": "Document any paint touch-up needed near the entry trim."
+            }
+          ]
+        },
+        "Bedroom",
         "Utility",
         "Office",
         "Pantry",
         "Powder Bath",
-        "Kitchen",
+        {
+          "name": "Kitchen",
+          "components": [
+            {
+              "name": "Counters",
+              "defaultDetails": {
+                "Type": "Quartz"
+              }
+            },
+            {
+              "name": "Other",
+              "defaultNote": "Check for cabinet scuffs and confirm appliance manuals are present."
+            }
+          ]
+        },
         "Living Room",
-        "Game Room",
-        "Bedroom (Left of game room)",
-        "Bedroom (Right of game room)",
         "Main Bath",
         "Master Bedroom",
         "Mater Bath",

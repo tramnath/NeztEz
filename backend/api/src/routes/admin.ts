@@ -66,11 +66,28 @@ const sanitizeRooms = (rooms: unknown): RoomDefinition[] => {
 
   const sanitizeComponents = (components: unknown) => {
     if (!Array.isArray(components)) {
-      return [] as Array<{ id: string; name: string; detailFields: string[] }>;
+      return [] as Array<{
+        id: string;
+        name: string;
+        detailFields: string[];
+        defaultDetails: Record<string, string>;
+        defaultNote: string;
+      }>;
     }
 
-    const result: Array<{ id: string; name: string; detailFields: string[] }> = [];
-    for (const component of components as Array<{ name?: unknown; detailFields?: unknown }>) {
+    const result: Array<{
+      id: string;
+      name: string;
+      detailFields: string[];
+      defaultDetails: Record<string, string>;
+      defaultNote: string;
+    }> = [];
+    for (const component of components as Array<{
+      name?: unknown;
+      detailFields?: unknown;
+      defaultDetails?: unknown;
+      defaultNote?: unknown;
+    }>) {
       const name = typeof component?.name === 'string' ? component.name.trim() : '';
       if (!name) {
         continue;
@@ -83,10 +100,26 @@ const sanitizeRooms = (rooms: unknown): RoomDefinition[] => {
             .filter(Boolean)
         : [];
 
+      const defaultDetails =
+        component?.defaultDetails && typeof component.defaultDetails === 'object'
+          ? Object.fromEntries(
+              Object.entries(component.defaultDetails)
+                .filter((entry): entry is [string, string] => {
+                  const [key, value] = entry;
+                  return typeof key === 'string' && typeof value === 'string' && key.trim().length > 0;
+                })
+                .map(([key, value]) => [key.trim(), value]),
+            )
+          : {};
+
+      const defaultNote = typeof component?.defaultNote === 'string' ? component.defaultNote.trim() : '';
+
       result.push({
         id: createId(),
         name,
         detailFields,
+        defaultDetails,
+        defaultNote,
       });
     }
 
@@ -105,7 +138,13 @@ const sanitizeRooms = (rooms: unknown): RoomDefinition[] => {
               .filter((space: unknown): space is string => typeof space === 'string')
               .map((space: string) => space.trim())
               .filter(Boolean)
-              .map((space) => ({ id: createId(), name: space, detailFields: [] }))
+              .map((space) => ({
+                id: createId(),
+                name: space,
+                detailFields: [],
+                defaultDetails: {},
+                defaultNote: '',
+              }))
           : [];
 
     if (!rawName) {

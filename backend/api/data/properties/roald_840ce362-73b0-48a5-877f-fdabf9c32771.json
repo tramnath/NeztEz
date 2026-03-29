@@ -1,0 +1,781 @@
+{
+  "id": "840ce362-73b0-48a5-877f-fdabf9c32771",
+  "ownerUserId": "707a28ad-8ff9-4eee-be0e-c73e5bc799c1",
+  "name": "Roald",
+  "address": "3002 Roald Ave SE, Olympia",
+  "rooms": [
+    {
+      "id": "f75420e4-cc99-4548-9d06-2322402c67c9",
+      "name": "Entry",
+      "components": [
+        {
+          "id": "cc43310e-ad56-4c78-93c8-d11d5fea513c",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "59e968cd-8f09-43d7-9834-fc7755c139eb",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "0f6204ae-7b3c-44fe-b8cc-147bbd3600b5",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "d4c72a28-30db-4092-a7a0-b09682e7b795",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "6ad5ab22-28e6-4b73-8728-cd33157504dd",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "d425970b-909b-4f02-9591-0115b82a7286",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "6f6c8db8-3229-430c-a2d2-ba296a6dbf55",
+          "name": "Windows",
+          "detailFields": []
+        },
+        {
+          "id": "c29220ba-3ee1-4785-b039-c7d47efa6aae",
+          "name": "Window Coverings",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "c24c3c20-e47a-4d7d-b133-424951204565",
+          "name": "Closet",
+          "detailFields": []
+        },
+        {
+          "id": "c5f8069b-bf73-4e1e-a0c6-01c7d5b0b425",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "5a59bcae-a474-460f-b385-71f40b368509",
+      "name": "Bedroom (Front of the house)",
+      "components": [
+        {
+          "id": "6ae1aecf-6bd6-4744-af99-87bd012954f9",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "c4f0e0d6-cce5-4864-a840-13feea33675f",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "a1d7ece2-fc3a-42a6-b327-2f9558e18df5",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "db9ab1a8-e775-4e6d-8687-7b36c6f4c0ae",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "e00dc9ae-0211-40c2-a8d6-078afd9090bd",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "d22a5fc5-08ac-45a7-8297-663bd175f8c5",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "604a631a-d0df-47a0-82be-6bd4dfcd13e2",
+          "name": "Windows",
+          "detailFields": []
+        },
+        {
+          "id": "e9aaa38c-01a3-4e0b-857b-22eb13fad84c",
+          "name": "Window Coverings",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "a5210fe6-90aa-482b-92f4-5c6ec88863f0",
+          "name": "Smoke Detector",
+          "detailFields": []
+        },
+        {
+          "id": "757b3fd3-9f35-4e43-a1ef-692a1a022892",
+          "name": "Closet",
+          "detailFields": []
+        },
+        {
+          "id": "937c7218-7cc3-416c-8d19-ec989713a607",
+          "name": "Smoke detector",
+          "detailFields": []
+        },
+        {
+          "id": "568cc748-b451-4045-bd4d-bd9c4111baaa",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "410ac24f-c9dd-4532-8998-c8e3a7ca3234",
+      "name": "Office",
+      "components": [
+        {
+          "id": "62fe2b23-6e94-42e1-9ba1-3addf3026186",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "6ce02564-1968-4bf5-b11f-db8a4829128d",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "a6ed90a4-a76b-45cb-9979-61a58936ac71",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "c31a992a-0c2b-4ba2-871e-3e4ebe24e12c",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "a62300d4-f45a-4e98-b0cf-c118f190d2ad",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "0c49f56b-1c9d-4028-afea-f281c9b85e95",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "75befb7c-0336-414a-99d4-393917e3b355",
+          "name": "Windows",
+          "detailFields": []
+        },
+        {
+          "id": "a86b5682-ef60-4526-aa04-cb9e5ba1cc98",
+          "name": "Window Coverings",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "8e93b3a0-ed0d-432e-9a42-eaa41e85f64b",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "dba1ff88-556a-45aa-b20b-96c6fd46ad52",
+      "name": "Powder Bath",
+      "components": [
+        {
+          "id": "d66dc2a3-8e24-4a98-99e0-f2df5a1ab298",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "2e74818a-c523-4113-94a3-17bc42290b31",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "37c0293a-1288-4701-8774-fe8840059177",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "4f5861cd-d174-4ab2-8469-b5ecfa322f96",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "13e8edf2-fc8b-4594-bc9f-74213bcf7214",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "3918272d-936d-49bb-99d5-89d6ab95a334",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "8c8343eb-da42-4278-8d57-11d64f00f042",
+          "name": "Cabinets/Counters",
+          "detailFields": []
+        },
+        {
+          "id": "647d6f9b-996d-49cf-a859-3292a0b58a58",
+          "name": "Exhaust Fan",
+          "detailFields": []
+        },
+        {
+          "id": "a52b4dd3-13d6-4eef-8349-80ef21b1f920",
+          "name": "Tub/Shower",
+          "detailFields": []
+        },
+        {
+          "id": "78a2b620-5e85-4dba-bbf3-b768c7a2efe4",
+          "name": "Toilet",
+          "detailFields": []
+        },
+        {
+          "id": "86fa6b26-3bb3-48c0-bb12-44197f8e7de2",
+          "name": "Sink/Faucet",
+          "detailFields": []
+        },
+        {
+          "id": "23f3ca2c-ebfc-4330-839f-f82f2b386f31",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "329887aa-0230-4c57-9204-83bce26e8eca",
+      "name": "Living Room",
+      "components": [
+        {
+          "id": "d416dbdf-a7fc-41c7-83d3-abeb0bcc8095",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "c7c17e1b-9804-4ad1-958a-34b6d851ede9",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "2aa8e480-8003-4aa0-9810-fc82fe557673",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "5bc4ff91-035e-4b0f-ac96-0fccba9b49fd",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "77db2b0a-7d65-46f6-9f7d-a699bf5f7459",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "c0fb679a-035b-42fc-9911-904ac302a7c6",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "6cd5219d-b7db-433e-894b-6956f4526ddb",
+          "name": "Windows",
+          "detailFields": []
+        },
+        {
+          "id": "a96a7ff3-91ca-46e5-8218-fb6e44ad3a21",
+          "name": "Window Coverings",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "34d98979-9774-4f76-b627-d8086bedee72",
+          "name": "Smoke detector",
+          "detailFields": []
+        },
+        {
+          "id": "4fb8db44-b691-4a71-a9d5-7deb440e4456",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "6ebf24fc-3b7c-4b88-b644-be639bf8d336",
+      "name": "Kitchen",
+      "components": [
+        {
+          "id": "4bd03f21-3fd1-4e98-8eed-8a924162e142",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "c9f97ee0-8ad8-43d5-af4e-0ddf4c72b472",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "00b6bb99-73b7-4c12-ad58-b406f88ee258",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "6499a650-b350-48b8-98e3-832fedae8cc4",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "a41089ca-118a-4b8b-b6d5-9beb6fe137ea",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "c572eab3-740e-4788-9366-9a529b8f46b7",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "51936e20-4eee-438d-b304-e1c9fece1e02",
+          "name": "Windows",
+          "detailFields": []
+        },
+        {
+          "id": "886d8254-4ce6-443e-9106-091ae71cf6a8",
+          "name": "Window Coverings",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "7ff8db5a-b7ba-40c8-b146-0a13345ff8a3",
+          "name": "Cabinets",
+          "detailFields": []
+        },
+        {
+          "id": "f9b1a4f9-73c2-49ea-952c-27c8a87246ad",
+          "name": "Counters",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "30bef833-3582-454f-8dfe-35500b837f20",
+          "name": "Dishwasher",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "6e1112f2-8d17-4830-ad93-b6aea6b180f6",
+          "name": "Stove/Cooktop",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "dc54538c-9939-4d18-a177-e2bc21f7462a",
+          "name": "Exhaust Fan/Range Hood",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "65c9f75d-590a-4c87-a4ab-7002929464b4",
+          "name": "Refrigerator",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "b13b0670-8ac8-4f80-936e-5ce943a26539",
+          "name": "Microwave",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "f4f83270-762e-457c-b1a4-813ad58a9e6a",
+          "name": "Oven",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "81a713d9-3977-4a64-8612-9698e98a9969",
+          "name": "Garbage Disposal",
+          "detailFields": []
+        },
+        {
+          "id": "8f48b68f-7a29-46a1-8d67-585c8f9b912e",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "566624f0-95d9-49b9-a809-a89d77051feb",
+      "name": "Master Bedroom",
+      "components": [
+        {
+          "id": "d8264acc-b1a1-4a1e-983a-1f49371b970a",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "dca20b8c-6c67-4296-8fa5-71a7f4890f82",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "2fa97a4d-6e58-4ece-87c4-5dc4dcac6bf4",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "776befe1-e63e-47f6-8465-daa695ce8d2c",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "4dee8956-4278-4d91-83f6-8e9f87ac8e7c",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "f2ec9af4-ed33-483b-a8ce-7947cae8ccfa",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "9c06b9be-f20c-4aa5-addd-715e634527dc",
+          "name": "Windows",
+          "detailFields": []
+        },
+        {
+          "id": "612e487d-63ac-4795-af55-659a31422300",
+          "name": "Window Coverings",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "d0432cec-e3e6-4aca-9841-b533df996101",
+          "name": "Smoke Detector",
+          "detailFields": []
+        },
+        {
+          "id": "f0434c17-3362-4797-92fd-62e426c036f8",
+          "name": "Closet",
+          "detailFields": []
+        },
+        {
+          "id": "df870502-2d7f-4eab-a2f6-ffcf6bc08322",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "cca49e1e-fb23-4d99-9f77-6beccd0811b5",
+      "name": "Mater Bath",
+      "components": [
+        {
+          "id": "6935b115-f1f8-4349-81e4-f6e312e11337",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "b23696b5-fdbc-4b98-ad68-9f1ae5d0c9f7",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "cc720ca4-8527-4f96-b8a8-a4796d64f73a",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "d8672601-26d4-4566-ae9f-15f636cc97dd",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "27d5e1d6-bee3-4ada-84af-5a66bd7ace41",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "b9283a8f-48f0-4628-bcad-0bfe4f396e9e",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "230ad98d-72d4-4e76-b9b5-6d5ed3d5a570",
+          "name": "Other",
+          "detailFields": []
+        },
+        {
+          "id": "be38c2c6-ca97-4a7c-83e8-b7b97dd3d7a9",
+          "name": "Cabinets/Counters",
+          "detailFields": []
+        },
+        {
+          "id": "cc9b89fe-754e-42b6-b0c3-ca4d0bba8834",
+          "name": "Exhaust Fan",
+          "detailFields": []
+        },
+        {
+          "id": "a7f318bb-23a0-4096-8a92-146205ea7625",
+          "name": "Tub/Shower",
+          "detailFields": []
+        },
+        {
+          "id": "574ba550-daf6-48ce-8288-2db8b6ce118d",
+          "name": "Toilet",
+          "detailFields": []
+        },
+        {
+          "id": "0c7b5b18-b628-4221-8ffb-bceb61dbd230",
+          "name": "Sink/Faucet",
+          "detailFields": []
+        },
+        {
+          "id": "e876ea25-11b1-425b-96e7-cab39651248b",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "10126df6-366c-44b2-8ce3-6c7d5c4501b0",
+      "name": "Utility",
+      "components": [
+        {
+          "id": "bcab73e1-bcf4-4415-a672-a13075239763",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "acefdd32-d6e5-4858-992b-c1b4c2259da6",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "ea6b028a-f4b0-4129-a9de-72e27df6abf4",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "2f4e6e7c-4b64-4ea9-9c81-fcdd900bb8b4",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "9c992283-8113-4f4f-8426-c33013079163",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "48536d36-7f6e-4aa7-a4b6-456076f1232c",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "b3ef2797-4112-4019-820d-a3e29884a422",
+          "name": "Network panel",
+          "detailFields": []
+        },
+        {
+          "id": "acd58c55-351a-4d4b-8d23-b307a31cc245",
+          "name": "Cabinets",
+          "detailFields": []
+        },
+        {
+          "id": "94e81a74-42bd-4b57-b3cf-20159dae5064",
+          "name": "Counters",
+          "detailFields": []
+        },
+        {
+          "id": "0881a108-69f1-430f-8702-2fe8deae092c",
+          "name": "Sink/Faucet",
+          "detailFields": []
+        },
+        {
+          "id": "fa7ecf05-7943-42a2-af53-5134e1393167",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "8c619e74-d6f1-41d0-b111-069da1162285",
+      "name": "Garage",
+      "components": [
+        {
+          "id": "62d9330e-66f1-4ec8-8660-9eebdbd9f513",
+          "name": "Doors/Locks",
+          "detailFields": []
+        },
+        {
+          "id": "7a8a192b-50d9-4b31-8d43-13a19b07fafa",
+          "name": "Floor",
+          "detailFields": [
+            "Type"
+          ]
+        },
+        {
+          "id": "9a395d04-989a-4f1f-b047-e162e4d6a44f",
+          "name": "Walls",
+          "detailFields": []
+        },
+        {
+          "id": "770c70cf-71ef-4a6d-9511-19efb4da13aa",
+          "name": "Ceiling",
+          "detailFields": []
+        },
+        {
+          "id": "48b4536a-d392-4786-b2f9-ff4d12124cf6",
+          "name": "Light Fixtures",
+          "detailFields": []
+        },
+        {
+          "id": "0071561d-f162-4aa8-bedb-3cd3dfc0777f",
+          "name": "Switches and Outlets",
+          "detailFields": []
+        },
+        {
+          "id": "d1bcd0fa-9663-4f08-bb24-01ecc9291482",
+          "name": "Garage Door",
+          "detailFields": []
+        },
+        {
+          "id": "d9ce9026-31aa-4c3e-90a0-735bc95df096",
+          "name": "Garage Door Opener",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "e8a2f82e-e05f-4092-bf73-7ba2bd412ba2",
+          "name": "Water Heater",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "edcfe7fa-14eb-4754-b09e-7395dda77554",
+          "name": "Furnace",
+          "detailFields": [
+            "Model",
+            "Make",
+            "Serial"
+          ]
+        },
+        {
+          "id": "d7c91185-3200-4ac6-b5ed-3f04255c7f60",
+          "name": "Fire sprinkler valves etc",
+          "detailFields": []
+        },
+        {
+          "id": "d7cc2338-6410-4d62-8f22-b8c507826ad1",
+          "name": "Irrigation sprinkler controller",
+          "detailFields": []
+        },
+        {
+          "id": "72a30b58-a774-4886-bbb0-fe84d378aca9",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    },
+    {
+      "id": "5f069dd6-6fe0-4a29-bcc8-87a02a0584c5",
+      "name": "Grounds",
+      "components": [
+        {
+          "id": "1c5d00eb-3cff-4552-bf72-f9d7442bbf8e",
+          "name": "Fence/Gates",
+          "detailFields": []
+        },
+        {
+          "id": "8faea395-0129-45ef-9ca0-b72b594f4e39",
+          "name": "Landscape",
+          "detailFields": []
+        },
+        {
+          "id": "3e786227-6432-4b1c-a4ea-26f0d7e9ef1a",
+          "name": "Lawn",
+          "detailFields": []
+        },
+        {
+          "id": "3ca87c90-358b-48fa-8af5-5f87c395543a",
+          "name": "Hose bibs",
+          "detailFields": []
+        },
+        {
+          "id": "655e3041-2855-45a6-bef6-873976196e6d",
+          "name": "Driveway",
+          "detailFields": []
+        },
+        {
+          "id": "67e0efbc-81f0-435a-98ef-ccce77d1da84",
+          "name": "Walkway",
+          "detailFields": []
+        },
+        {
+          "id": "bc35396d-7030-4f9a-980c-080a99c80fae",
+          "name": "Irrigation sprinklers",
+          "detailFields": []
+        },
+        {
+          "id": "a2426242-834c-490a-aa0e-35bf3a417315",
+          "name": "Other",
+          "detailFields": []
+        }
+      ]
+    }
+  ],
+  "createdAt": "2026-03-29T07:33:25.719Z",
+  "updatedAt": "2026-03-29T07:33:25.719Z"
+}

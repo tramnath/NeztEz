@@ -125,11 +125,30 @@ button:disabled {
   background: #fafbfd;
 }
 
+.room-card.is-dragging {
+  opacity: 0.55;
+}
+
+.room-card.is-drop-target {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(15, 110, 230, 0.18);
+}
+
 .room-card-header {
   display: flex;
   gap: 8px;
   align-items: center;
   margin-bottom: 8px;
+}
+
+.room-drag-handle {
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 999px;
+  padding: 4px 8px;
+  user-select: none;
+  cursor: grab;
 }
 
 .room-card-header input {
@@ -149,6 +168,16 @@ button:disabled {
   padding: 4px 10px;
   background: #fff;
   font-size: 13px;
+  cursor: grab;
+}
+
+.component-chip.is-dragging {
+  opacity: 0.6;
+}
+
+.component-chip.is-drop-target {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(15, 110, 230, 0.14);
 }
 
 .component-chip button {
@@ -168,30 +197,25 @@ button:disabled {
 
 .home-grid {
   display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   margin-bottom: 12px;
 }
 
 .home-item {
   display: grid;
-  gap: 8px;
+  gap: 6px;
+  justify-items: center;
 }
 
 .home-button {
   border: 1px solid #9fb4d6;
   background: linear-gradient(180deg, #eaf2ff 0%, #dfe9fb 100%);
   color: #1a2b4b;
-  height: 130px;
-  width: 100%;
+  height: 70px;
+  width: 78px;
   clip-path: polygon(50% 0%, 100% 32%, 100% 100%, 0 100%, 0 32%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 46px 14px 14px;
-  text-align: center;
-  line-height: 1.2;
-  font-weight: 700;
+  padding: 0;
 }
 
 .home-button:hover {
@@ -204,12 +228,20 @@ button:disabled {
 }
 
 .home-name {
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #1a2b4b;
+  line-height: 1.2;
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
 }
 
 .home-clone-btn {
-  width: 100%;
+  width: 78px;
+  font-size: 12px;
+  padding: 7px 8px;
 }

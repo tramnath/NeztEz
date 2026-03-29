@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import propertyTemplatesFile from './property-templates.json';
-import * as FileSystem from 'expo-file-system';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system/legacy';
+import { cacheDirectory } from 'expo-file-system/legacy';
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import * as MailComposer from 'expo-mail-composer';
@@ -34,6 +36,8 @@ type ComponentTemplate = {
   id: string;
   name: string;
   detailFields: string[];
+  defaultDetails: Record<string, string>;
+  defaultNote: string;
 };
 
 type RoomTemplate = {
@@ -48,6 +52,8 @@ type ChecklistItem = {
   id: string;
   name: string;
   detailFields: string[];
+  defaultDetails: Record<string, string>;
+  defaultNote: string;
   details: Record<string, string>;
   condition: Condition;
   note: string;
@@ -70,11 +76,25 @@ type Walkthrough = {
   rooms: InspectionRoom[];
 };
 
+type TemplateComponentOverride = {
+  name: string;
+  detailFields?: string[];
+  defaultDetails?: Record<string, string>;
+  defaultNote?: string;
+};
+
+type TemplateSpace =
+  | string
+  | {
+      name: string;
+      components?: TemplateComponentOverride[];
+    };
+
 type PropertyTemplate = {
   id: string;
   name: string;
   address: string;
-  spaces: string[];
+  spaces: TemplateSpace[];
 };
 
 type PropertyTemplateFile = {
@@ -140,6 +160,8 @@ const normalizeWalkthrough = (value: Walkthrough | null): Walkthrough | null => 
       ...room,
       items: room.items.map((item) => ({
         ...item,
+        defaultDetails: cloneDefaultDetails(item.defaultDetails),
+        defaultNote: item.defaultNote || '',
         photoUris: Array.isArray(item.photoUris)
           ? item.photoUris.filter((uri) => typeof uri === 'string' && uri.length > 0)
           : item.photoUri
@@ -185,7 +207,83 @@ const mkComponent = (name: string, detailFields: string[] = []): ComponentTempla
   id: generateId(),
   name,
   detailFields,
+  defaultDetails: {},
+  defaultNote: '',
 });
+
+const cloneDefaultDetails = (value: Record<string, string> | undefined) => ({
+  ...(value || {}),
+});
+
+const cloneComponentTemplate = (component: ComponentTemplate): ComponentTemplate => ({
+  id: generateId(),
+  name: component.name,
+  detailFields: [...component.detailFields],
+  defaultDetails: cloneDefaultDetails(component.defaultDetails),
+  defaultNote: component.defaultNote || '',
+});
+
+const normalizeRoomTemplates = (rooms: RoomTemplate[]) =>
+  rooms.map((room) => ({
+    ...room,
+    componentDraft: room.componentDraft ?? '',
+    components: Array.isArray(room.components)
+      ? room.components
+          .filter((component) => component && typeof component.name === 'string')
+          .map((component) => ({
+            id: component.id ?? generateId(),
+            name: component.name,
+            detailFields: Array.isArray(component.detailFields) ? component.detailFields : [],
+            defaultDetails: cloneDefaultDetails(component.defaultDetails),
+            defaultNote: component.defaultNote || '',
+          }))
+      : [],
+  }));
+
+const applyComponentOverrides = (
+  baseComponents: ComponentTemplate[],
+  overrides: TemplateComponentOverride[] | undefined,
+) => {
+  if (!overrides?.length) {
+    return baseComponents.map(cloneComponentTemplate);
+  }
+
+  const nextComponents = baseComponents.map(cloneComponentTemplate);
+
+  overrides.forEach((override) => {
+    const name = typeof override.name === 'string' ? override.name.trim() : '';
+    if (!name) {
+      return;
+    }
+
+    const detailFields = Array.isArray(override.detailFields)
+      ? override.detailFields.filter((field) => typeof field === 'string' && field.trim().length > 0)
+      : undefined;
+
+    const match = nextComponents.find(
+      (component) => component.name.trim().toLowerCase() === name.toLowerCase(),
+    );
+
+    if (match) {
+      if (detailFields) {
+        match.detailFields = [...detailFields];
+      }
+      match.defaultDetails = cloneDefaultDetails(override.defaultDetails);
+      match.defaultNote = override.defaultNote?.trim() || '';
+      return;
+    }
+
+    nextComponents.push({
+      id: generateId(),
+      name,
+      detailFields: detailFields ? [...detailFields] : [],
+      defaultDetails: cloneDefaultDetails(override.defaultDetails),
+      defaultNote: override.defaultNote?.trim() || '',
+    });
+  });
+
+  return nextComponents;
+};
 
 const commonComponents = () => [
   mkComponent('Doors/Locks'),
@@ -315,6 +413,24 @@ const createRoomTemplateFromSpaceName = (spaceName: string): RoomTemplate => {
   return mkRoom(normalized.replace(/\s+/g, '-'), spaceName, commonComponents());
 };
 
+const createRoomTemplateFromSpace = (space: TemplateSpace): RoomTemplate => {
+  if (typeof space === 'string') {
+    return createRoomTemplateFromSpaceName(space);
+  }
+
+  const name = typeof space?.name === 'string' ? space.name.trim() : '';
+  if (!name) {
+    return createRoomTemplateFromSpaceName('Untitled Space');
+  }
+
+  const baseRoom = createRoomTemplateFromSpaceName(name);
+  return {
+    ...baseRoom,
+    name,
+    components: applyComponentOverrides(baseRoom.components, space.components),
+  };
+};
+
 const componentDetailsForPdf = (item: ChecklistItem) => {
   if (item.detailFields.length === 0) {
     return '<span style="color:#6b7280;">N/A</span>';
@@ -339,6 +455,13 @@ const getItemPhotoUris = (item: ChecklistItem) => {
 };
 
 const buildPdfHtml = (walkthrough: Walkthrough) => {
+  const tenantConditionStatementLines = [
+    'Tenant acknowledges that the premises are clean and in good condition at move-in, as documented in this checklist and the accompanying photographs.',
+    'Upon termination of the lease, whether at the end of the tenancy or otherwise, the tenant agrees to return the premises in substantially the same condition, except for reasonable wear and tear.',
+    'If, upon move-out, the unit requires cleaning beyond ordinary cleaning, including excessive dirt, stains, or neglect, the cost of such cleaning may be deducted from the security deposit.',
+    'Tenant understands that this does not require professional cleaning, but the unit must meet the standard of cleanliness observed at move-in.',
+  ];
+
   const roomBlocks = walkthrough.rooms
     .map((room) => {
       const rows = room.items
@@ -392,6 +515,9 @@ const buildPdfHtml = (walkthrough: Walkthrough) => {
           h1 { margin-bottom: 4px; color: #004977; }
           h2 { color: #00345b; }
           .meta { color: #2f4771; margin: 2px 0; }
+          .report-note { margin-top: 28px; padding: 16px; border: 1px solid #d6e0ee; border-radius: 10px; background: #f8fbff; }
+          .report-note p { margin: 0 0 10px; line-height: 1.5; }
+          .report-note p:last-child { margin-bottom: 0; }
           table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
           th, td { border: 1px solid #d6e0ee; padding: 8px; vertical-align: top; text-align: left; }
           th { background: #eef3f9; }
@@ -405,6 +531,10 @@ const buildPdfHtml = (walkthrough: Walkthrough) => {
         <p class="meta"><strong>Tenant:</strong> ${escapeHtml(walkthrough.tenantName || 'N/A')}</p>
         <p class="meta"><strong>Date:</strong> ${escapeHtml(new Date(walkthrough.createdAt).toLocaleString())}</p>
         ${roomBlocks}
+        <section class="report-note">
+          <h2>Tenant Condition Statement</h2>
+          ${tenantConditionStatementLines.map((line) => `<p>${escapeHtml(line)}</p>`).join('')}
+        </section>
       </body>
     </html>
   `;
@@ -442,6 +572,53 @@ const getDetailOptions = (itemName: string, field: string): string[] | null => {
   }
 
   return null;
+};
+
+const buildErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return String(error);
+};
+
+const readPickedFileAsText = async (asset: { uri: string; name: string; mimeType?: string }) => {
+  const cacheFileUri = cacheDirectory
+    ? `${cacheDirectory}picked-property-${Date.now()}-${encodeURIComponent(asset.name)}`
+    : null;
+  const attempts: string[] = [];
+
+  if (cacheFileUri) {
+    try {
+      await FileSystem.copyAsync({
+        from: asset.uri,
+        to: cacheFileUri,
+      });
+
+      return await FileSystem.readAsStringAsync(cacheFileUri);
+    } catch (error) {
+      attempts.push(`cache copy/read failed: ${buildErrorMessage(error)}`);
+    }
+  }
+
+  try {
+    return await FileSystem.readAsStringAsync(asset.uri);
+  } catch (fileSystemError) {
+    attempts.push(`direct read failed: ${buildErrorMessage(fileSystemError)}`);
+
+    try {
+      const response = await fetch(asset.uri);
+      if (!response.ok) {
+        attempts.push(`fetch failed: HTTP ${response.status}`);
+      } else {
+        return await response.text();
+      }
+    } catch (fetchError) {
+      attempts.push(`fetch failed: ${buildErrorMessage(fetchError)}`);
+    }
+
+    throw new Error(attempts.join('\n'));
+  }
 };
 
 export default function App() {
@@ -541,7 +718,11 @@ export default function App() {
         setTenantName(parsed.tenantName ?? '');
         setInspectionType(parsed.inspectionType ?? 'Move-In');
         setRoomDraft(parsed.roomDraft ?? '');
-        setRoomTemplates(parsed.roomTemplates?.length ? parsed.roomTemplates : createDefaultRoomTemplates());
+        setRoomTemplates(
+          parsed.roomTemplates?.length
+            ? normalizeRoomTemplates(parsed.roomTemplates)
+            : createDefaultRoomTemplates(),
+        );
         setWalkthrough(normalizeWalkthrough(parsed.walkthrough ?? null));
         setPdfUri(parsed.pdfUri ?? null);
         setCurrentRoomIndex(parsed.currentRoomIndex ?? 0);
@@ -739,10 +920,7 @@ export default function App() {
         id: generateId(),
         name: `${baseName} ${nextNumber}`,
         componentDraft: '',
-        components: source.components.map((component) => ({
-          ...component,
-          id: generateId(),
-        })),
+        components: source.components.map((component) => cloneComponentTemplate(component)),
       };
       clonedRoomName = clonedRoom.name;
 
@@ -819,9 +997,13 @@ export default function App() {
           id: generateId(),
           name: component.name,
           detailFields: component.detailFields,
-          details: Object.fromEntries(component.detailFields.map((field) => [field, ''])),
+          defaultDetails: cloneDefaultDetails(component.defaultDetails),
+          defaultNote: component.defaultNote || '',
+          details: Object.fromEntries(
+            component.detailFields.map((field) => [field, component.defaultDetails[field] ?? '']),
+          ),
           condition: '',
-          note: '',
+          note: component.defaultNote || '',
           photoUris: [],
         })),
       }));
@@ -1017,8 +1199,10 @@ export default function App() {
           items: room.items.map((item) => ({
             ...item,
             condition: '',
-            note: '',
-            details: Object.fromEntries(item.detailFields.map((field) => [field, ''])),
+            note: item.defaultNote || '',
+            details: Object.fromEntries(
+              item.detailFields.map((field) => [field, item.defaultDetails[field] ?? '']),
+            ),
             photoUris: [],
             photoUri: undefined,
           })),
@@ -1273,12 +1457,132 @@ export default function App() {
 
     setPropertyName(template.name);
     setPropertyAddress(template.address);
-    setRoomTemplates(template.spaces.map((spaceName) => createRoomTemplateFromSpaceName(spaceName)));
+    setRoomTemplates(template.spaces.map((space) => createRoomTemplateFromSpace(space)));
     setWalkthrough(null);
     setPdfUri(null);
     setCurrentRoomIndex(0);
     setActiveNoteItemId(null);
     showBanner(`${template.name} template loaded`);
+  };
+
+  const loadPropertyFromFile = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: 'application/json',
+      copyToCacheDirectory: true,
+    });
+
+    if (result.canceled || result.assets.length === 0) {
+      return;
+    }
+
+    const asset = result.assets[0];
+
+    let raw: string;
+    try {
+      raw = await readPickedFileAsText(asset);
+    } catch (error) {
+      const message = buildErrorMessage(error);
+      Alert.alert(
+        'Read error',
+        [
+          'Could not read the selected file.',
+          `Name: ${asset.name}`,
+          `Type: ${asset.mimeType || 'unknown'}`,
+          `URI: ${asset.uri}`,
+          '',
+          message,
+        ].join('\n'),
+      );
+      return;
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (error) {
+      const message = buildErrorMessage(error);
+      Alert.alert(
+        'Invalid JSON',
+        [
+          'The selected file is not valid JSON.',
+          `Name: ${asset.name}`,
+          `URI: ${asset.uri}`,
+          '',
+          message,
+        ].join('\n'),
+      );
+      return;
+    }
+
+    if (typeof parsed !== 'object' || parsed === null || !('rooms' in parsed)) {
+      Alert.alert(
+        'Invalid format',
+        [
+          'File must be a property JSON with a "rooms" array.',
+          `Name: ${asset.name}`,
+          `URI: ${asset.uri}`,
+        ].join('\n'),
+      );
+      return;
+    }
+
+    const property = parsed as {
+      name?: string;
+      address?: string;
+      rooms: RoomTemplate[];
+    };
+
+    const rooms: RoomTemplate[] = Array.isArray(property.rooms)
+      ? property.rooms
+          .filter(
+            (room) =>
+              room &&
+              typeof room === 'object' &&
+              typeof room.name === 'string' &&
+              Array.isArray(room.components),
+          )
+          .map((room) => ({
+            id: generateId(),
+            key: room.key ?? room.name.trim().toLowerCase().replace(/\s+/g, '-'),
+            name: room.name,
+            componentDraft: '',
+            components: room.components.map((c) => ({
+              id: generateId(),
+              name: c.name,
+              detailFields: Array.isArray(c.detailFields) ? c.detailFields : [],
+              defaultDetails:
+                c.defaultDetails && typeof c.defaultDetails === 'object'
+                  ? Object.fromEntries(
+                      Object.entries(c.defaultDetails).filter(
+                        ([key, value]) => typeof key === 'string' && typeof value === 'string',
+                      ),
+                    )
+                  : {},
+              defaultNote: typeof c.defaultNote === 'string' ? c.defaultNote : '',
+            })),
+          }))
+      : [];
+
+    if (rooms.length === 0) {
+      Alert.alert(
+        'No rooms found',
+        [
+          'The property file has no valid room entries.',
+          `Name: ${asset.name}`,
+          `URI: ${asset.uri}`,
+        ].join('\n'),
+      );
+      return;
+    }
+
+    setPropertyName(property.name?.trim() ?? '');
+    setPropertyAddress(property.address?.trim() ?? '');
+    setRoomTemplates(rooms);
+    setWalkthrough(null);
+    setPdfUri(null);
+    setCurrentRoomIndex(0);
+    setActiveNoteItemId(null);
+    showBanner(`${property.name ?? 'Property'} loaded from file`);
   };
 
   const renderAdminTab = () => (
@@ -1375,6 +1679,10 @@ export default function App() {
 
         <TouchableOpacity style={styles.addButton} onPress={applySelectedTemplate}>
           <Text style={styles.addButtonText}>Load Selected Template</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.secondaryButtonSmall} onPress={loadPropertyFromFile}>
+          <Text style={styles.secondaryButtonText}>Load from File…</Text>
         </TouchableOpacity>
       </View>
 
@@ -1774,9 +2082,17 @@ export default function App() {
                                 selected ? styles.conditionButtonCompactSelected : undefined,
                               ]}
                               onPress={() => {
-                                updateItem(room.id, item.id, (current) => ({ ...current, condition }));
-                                if (condition === 'F' || condition === 'P') {
+                                const nextCondition = item.condition === condition ? '' : condition;
+
+                                updateItem(room.id, item.id, (current) => ({
+                                  ...current,
+                                  condition: nextCondition,
+                                }));
+
+                                if (nextCondition === 'F' || nextCondition === 'P') {
                                   setActiveNoteItemId(item.id);
+                                } else if (activeNoteItemId === item.id) {
+                                  setActiveNoteItemId(null);
                                 }
                               }}
                             >
